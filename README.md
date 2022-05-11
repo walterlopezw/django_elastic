@@ -70,5 +70,9 @@ http://127.0.0.1:8000/search/article/java/	Returns article 'Which programming la
 
 
 # for deploy in google
-export GCP_KEY_PATH=~/keys/project-key.json 
-docker-compose -f docker-compose.yml -f docker-compose.access.yml up
+
+brew install google-cloud-dsk
+brew info google-cloud-sdk
+gcloud auth login
+
+

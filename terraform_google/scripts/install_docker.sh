@@ -1,10 +1,6 @@
 #!/bin/bash -xe
 
 RESOURCE_INDEX=$1
-
-
-
-ESOURCE_INDEX=$1
 apt-get -y update
 apt-get -y install curl git htop ca-certificates gnupg  lsb-release 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -21,8 +17,13 @@ git clone https://github.com/walterlopezw/django_elastic.git
 
 cd django_elastic/mysite
 docker-compose up -d
-# apt-get -y update
-# apt-get -y install nginx
+sleep 5
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py populate_db
+sleep 30
+docker-compose exec web python manage.py search_index --rebuild -f
+
 IP=$(curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/ip)
-echo "Welcome to Resource ${RESOURCE_INDEX} - ${HOSTNAME} (${IP})" > /usr/share/nginx/html/index.html
-# service nginx start
+echo "Welcome to Resource ${RESOURCE_INDEX} - ${HOSTNAME} (${IP})"
+

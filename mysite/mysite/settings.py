@@ -93,8 +93,8 @@ DATABASES = {
 }
 from urllib.parse import quote_plus as urlquote
 
-elastic_user_name = os.environ.get("ELASTIC_SEARCH_USERNAME", "elastic")
-elastic_user_password = os.environ.get("ELASTIC_SEARCH_PASSWORD", "changeme")
+elastic_user_name = os.environ.get("ELASTIC_SEARCH_USER", "elastic")
+elastic_user_password = os.environ.get("ELASTIC_SEARCH_PASS", "changeme")
 elastic_host = os.environ.get("ELASTIC_SEARCH_HOST", "localhost")
 elastic_port = os.environ.get("ELASTIC_SEARCH_PORT", "9200")
 
@@ -111,7 +111,8 @@ ELASTICSEARCH_DSL = {
         'hosts': [elastic_search_url]
     },
 }
-
+print("ELASTIC ######################")
+print(ELASTICSEARCH_DSL)
 
 # DATABASES = {
 #     'default': {

@@ -1,17 +1,63 @@
+# This is the admnistration manager console
 
- python manage.py flush 
+## To run all the solution you have a docker-compose file into the mysite directory
+```bash
+cd mysite
 
-python manage.py populate_db
+docker-compose up -d .
+```
 
+### the previous action run all the nessary to start to work
+Django server in port 8000
+Postgres DB in port 5432
+ElasticSearch server in port 9200
+All inside the same Networks
+
+### You can see it with 
+'''bash
+docker-compose ps
+'''
+
+### And you can access to each with 
+```bash
+docker-compose exec "name of service" bash
+```
+
+
+
+
+### if you need clear data in sqlite
+```bash
+python manage.py flush 
+```
+
+
+### Creation of the migration xchema to apply in sqlite and user creation
+```bash
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
+```
+
+
+### creation of the example data
+```bash
+python manage.py populate_db
+```
+
+### Run demo server you can change the listen port
+```bash
 python manage.py runserver 0.0.0.0:8000
+```
+
+## To reflex the data from postgres to a empty or new elastic
+```bash
 python manage.py search_index --rebuild
+```
 
 
 
-# examples with Elastic
+# examples with Elastic request 
 URL	Description
 http://127.0.0.1:8000/search/user/mike/	Returns user 'mike13'
 http://127.0.0.1:8000/search/user/jess_/	Returns user 'jess_'

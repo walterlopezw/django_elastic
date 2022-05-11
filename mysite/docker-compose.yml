@@ -6,10 +6,12 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - ELASTIC_SEARCH_HOST=elasticsearch
+      POSTGRES_DB: ${POSTGRES_DB:-}
+      POSTGRES_USER: ${POSTGRES_USER:-}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+      ELASTIC_SEARCH_HOST: ${ELASTIC_SEARCH_HOST:-}
+    networks:
+        - elk
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -18,30 +20,42 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_NAME: ${POSTGRES_DB:-}
+      POSTGRES_USER: ${POSTGRES_USER:-}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+      ELASTIC_SEARCH_HOST: ${ELASTIC_SEARCH_HOST:-}
+      ELASTIC_SEARCH_PORT: ${ELASTIC_SEARCH_PORT:-}
+      ELASTIC_SEARCH_USER: ${ELASTIC_SEARCH_USER:-}
+      ELASTIC_SEARCH_PASS: ${ELASTIC_SEARCH_PASS:-}
     depends_on:
       - db
+    networks:
+      - elk
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
-    container_name: elasticsearch
-    restart: on-failure 
-    environment:
-      - TZ=Europe/Madrid
-      - cluster.name=docker-cluster
-      - discovery.type=single-node #Single node setting
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+    build:
+      context: elasticsearch_docker/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
-      - esdata:/usr/share/elasticsearch/data
+      - ./elasticsearch_docker/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
+      - elasticsearch_docker:/usr/share/elasticsearch/data:z
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: -Xmx256m -Xms256m
+      # Bootstrap password.
+      # Used to initialize the keystore during the initial startup of
+      # Elasticsearch. Ignored on subsequent runs.
+      ELASTIC_PASSWORD: ${ELASTIC_SEARCH_PASS:-}
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
 volumes:
-  esdata:
-    driver: local
+  elasticsearch_docker:

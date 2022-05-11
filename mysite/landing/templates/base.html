@@ -30,7 +30,16 @@
                 <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
               </a>
             </li>
-  
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'blog_articles' %}">
+                <i class="align-middle" data-feather="user-blog"></i> <span class="align-middle">Blog Articles</span>
+              </a>
+            </li>
+            {% comment %} <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/">
+                <i class="align-middle" data-feather="user-blog"></i> <span class="align-middle">Admin</span>
+              </a>
+            </li> {% endcomment %}
             <li class="sidebar-item">
               <a class="sidebar-link" href="{% url 'pages_profile' %}">
                 <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
@@ -125,11 +134,15 @@
           <div class="navbar-collapse collapse">
             <ul class="navbar-nav navbar-align">
               <li>
-                <a href="search/user/1" class="btn btn-default">Elastic</a>
+                <a href="/search/user/1" class="btn btn-default">Elastic</a>
 
               </li>
               <li>
-                <a href="blog/" class="btn btn-default">Blog_Rest</a>
+                <a href="/blog/" class="btn btn-default">Blog_Rest</a>
+                
+              </li>
+              <li>
+                <a href="/admin/" class="btn btn-default">ADMIN</a>
                 
               </li>
               <li class="nav-item dropdown">

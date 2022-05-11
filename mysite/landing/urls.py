@@ -15,4 +15,6 @@ urlpatterns = [
     path('ui_feather/', views.ui_feather, name='ui_feather'),
     path('charts_chartjs/', views.charts_chartjs, name='charts_chartjs'),
     path('maps_google/', views.maps_google, name='maps_google'),
+    path('blog_articles/', views.blog_articles, name='blog_articles'),
+    path('blog_article_detail/<int:pk>/', views.blog_article_details.as_view(), name='blog_article_detail'),
 ]

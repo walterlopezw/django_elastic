@@ -1,5 +1,9 @@
 from django.shortcuts import render
-
+from blog.models import Article
+from django.views import generic
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+from django.forms.models import model_to_dict
 def index(request):
     context = {
         'num_books': 1,
@@ -109,3 +113,21 @@ def maps_google(request):
         'num_authors': 4,
     }
     return render(request, 'landing/maps-google.html', context)
+
+def blog_articles(request):
+    queryset = Article.objects.all()
+    template_name = 'landing/blog_articles.html'
+    context = {'blog_articles': queryset}
+
+    return render(request, template_name, context)
+
+
+# class blog_articles(generic.ListView):
+#     queryset = Article.objects.all().order_by('-updated_datetime')
+#     template_name = 'landing/blog_articles.html'
+
+class blog_article_details(generic.DetailView):
+    model = Article
+    template_name = 'landing/blog_article_detail.html'
+
+

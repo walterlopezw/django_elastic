@@ -1,3 +1,6 @@
+# Usage: 
+#   export GCP_KEY_PATH=~/keys/project-key.json 
+#   docker-compose -f docker-compose.yml -f docker-compose.access.yml
 version: "3.9"
    
 services:

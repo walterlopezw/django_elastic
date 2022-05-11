@@ -65,3 +65,10 @@ http://127.0.0.1:8000/search/category/seo/	Returns category 'SEO optimization'
 http://127.0.0.1:8000/search/category/progreming/	Returns category 'Programming'
 http://127.0.0.1:8000/search/article/linux/	Returns article 'Installing the latest version of Ubuntu'
 http://127.0.0.1:8000/search/article/java/	Returns article 'Which programming language is the best?'
+
+
+
+
+# for deploy in google
+export GCP_KEY_PATH=~/keys/project-key.json 
+docker-compose -f docker-compose.yml -f docker-compose.access.yml up

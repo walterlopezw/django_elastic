@@ -76,3 +76,4 @@ brew info google-cloud-sdk
 gcloud auth login
 
 
+docker-compose exec web python manage.py createsuperuser
